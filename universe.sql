@@ -119,6 +119,49 @@ ALTER SEQUENCE public.moon_moon_id_seq OWNED BY public.moon.moon_id;
 
 
 --
+-- Name: observation; Type: TABLE; Schema: public; Owner: freecodecamp
+--
+
+CREATE TABLE public.observation (
+    observation_id integer NOT NULL,
+    name character varying(100) NOT NULL,
+    location text,
+    telescope_model character varying(100) NOT NULL,
+    observation_date date NOT NULL,
+    duration_minutes integer,
+    is_successful boolean NOT NULL,
+    galaxy_id integer,
+    star_id integer,
+    planet_id integer,
+    moon_id integer
+);
+
+
+ALTER TABLE public.observation OWNER TO freecodecamp;
+
+--
+-- Name: observation_observation_id_seq; Type: SEQUENCE; Schema: public; Owner: freecodecamp
+--
+
+CREATE SEQUENCE public.observation_observation_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.observation_observation_id_seq OWNER TO freecodecamp;
+
+--
+-- Name: observation_observation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: freecodecamp
+--
+
+ALTER SEQUENCE public.observation_observation_id_seq OWNED BY public.observation.observation_id;
+
+
+--
 -- Name: planet; Type: TABLE; Schema: public; Owner: freecodecamp
 --
 
@@ -209,6 +252,13 @@ ALTER TABLE ONLY public.moon ALTER COLUMN moon_id SET DEFAULT nextval('public.mo
 
 
 --
+-- Name: observation observation_id; Type: DEFAULT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.observation ALTER COLUMN observation_id SET DEFAULT nextval('public.observation_observation_id_seq'::regclass);
+
+
+--
 -- Name: planet planet_id; Type: DEFAULT; Schema: public; Owner: freecodecamp
 --
 
@@ -263,6 +313,15 @@ INSERT INTO public.moon VALUES (42, 'Ariel', 1158, 'Thin', false, 20);
 
 
 --
+-- Data for Name: observation; Type: TABLE DATA; Schema: public; Owner: freecodecamp
+--
+
+INSERT INTO public.observation VALUES (1, 'Obervation 25', 'Observation A', 'Model X', '2023-01-01', 60, true, 1, 1, 13, 22);
+INSERT INTO public.observation VALUES (2, 'Obervation 26', 'Observation B', 'Model Y', '2023-02-01', 120, true, 2, 3, 14, 23);
+INSERT INTO public.observation VALUES (3, 'Obervation 27', 'Observation C', 'Model Z', '2023-03-01', 90, true, 3, 4, 15, 24);
+
+
+--
 -- Data for Name: planet; Type: TABLE DATA; Schema: public; Owner: freecodecamp
 --
 
@@ -313,6 +372,13 @@ SELECT pg_catalog.setval('public.moon_moon_id_seq', 42, true);
 
 
 --
+-- Name: observation_observation_id_seq; Type: SEQUENCE SET; Schema: public; Owner: freecodecamp
+--
+
+SELECT pg_catalog.setval('public.observation_observation_id_seq', 3, true);
+
+
+--
 -- Name: planet_planet_id_seq; Type: SEQUENCE SET; Schema: public; Owner: freecodecamp
 --
 
@@ -359,6 +425,22 @@ ALTER TABLE ONLY public.moon
 
 
 --
+-- Name: observation observation_name_key; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.observation
+    ADD CONSTRAINT observation_name_key UNIQUE (name);
+
+
+--
+-- Name: observation observation_pkey; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.observation
+    ADD CONSTRAINT observation_pkey PRIMARY KEY (observation_id);
+
+
+--
 -- Name: planet planet_name_key; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
 --
 
@@ -396,6 +478,38 @@ ALTER TABLE ONLY public.star
 
 ALTER TABLE ONLY public.moon
     ADD CONSTRAINT moon_planet_id_fkey FOREIGN KEY (planet_id) REFERENCES public.planet(planet_id);
+
+
+--
+-- Name: observation observation_galaxy_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.observation
+    ADD CONSTRAINT observation_galaxy_id_fkey FOREIGN KEY (galaxy_id) REFERENCES public.galaxy(galaxy_id);
+
+
+--
+-- Name: observation observation_moon_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.observation
+    ADD CONSTRAINT observation_moon_id_fkey FOREIGN KEY (moon_id) REFERENCES public.moon(moon_id);
+
+
+--
+-- Name: observation observation_planet_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.observation
+    ADD CONSTRAINT observation_planet_id_fkey FOREIGN KEY (planet_id) REFERENCES public.planet(planet_id);
+
+
+--
+-- Name: observation observation_star_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.observation
+    ADD CONSTRAINT observation_star_id_fkey FOREIGN KEY (star_id) REFERENCES public.star(star_id);
 
 
 --
